@@ -4,7 +4,9 @@ import librosa
 import soundfile as sf
 import os
 import tempfile
+from pydub.utils import which
 from pydub import AudioSegment
+AudioSegment.converter = which("ffmpeg")
 
 st.set_page_config(page_title="Noise Reducer", layout="centered")
 st.title("🔉 Noise Reducer App")
