@@ -38,6 +38,7 @@ Streamlit
 Librosa
 Noisereduce
 SoundFile
+ffmpeg (Ensure ffmpeg is installed for audio format support)
 
 📁 Project Structure
 NoiseReducerApp/
