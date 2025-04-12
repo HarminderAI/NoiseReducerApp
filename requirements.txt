@@ -1,4 +1,5 @@
 streamlit
-librosa
 noisereduce
+librosa
 soundfile
+pydub
