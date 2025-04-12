@@ -4,13 +4,19 @@ import librosa
 import soundfile as sf
 import os
 import tempfile
+import warnings
 from pydub.utils import which
 from pydub import AudioSegment
 import numpy as np
 
+# Suppress specific warnings
+warnings.filterwarnings("ignore", category=SyntaxWarning)
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+
 # Set the path to ffmpeg for pydub
 AudioSegment.converter = which("ffmpeg")
 
+# Streamlit UI
 st.set_page_config(page_title="Noise Reducer", layout="centered")
 st.title("🔉 Noise Reducer App")
 st.markdown("Upload a `.wav` or `.mp3` audio file and get a cleaned version!")
