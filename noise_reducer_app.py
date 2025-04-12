@@ -41,7 +41,11 @@ if uploaded_file is not None:
         cleaned_path = os.path.join(temp_dir, cleaned_filename)
         normalized_audio.export(cleaned_path, format="wav")
 
-    st.success("Done! 🎉 Your cleaned file is ready.")
+        st.success("Done! 🎉 Your cleaned file is ready.")
+
+    # Play cleaned audio before download
+    st.audio(cleaned_path, format="audio/wav")
+
     with open(cleaned_path, "rb") as f:
         st.download_button(
             label="⬇️ Download Cleaned Audio",
