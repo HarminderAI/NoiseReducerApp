@@ -87,3 +87,5 @@ if uploaded_file is not None:
             file_name=cleaned_filename,
             mime="audio/wav"
         )
+except Exception as e:
+        st.error(f"❌ Error during processing: {str(e)}")
