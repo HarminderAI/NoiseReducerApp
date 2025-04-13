@@ -1,0 +1,57 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.env/
+.venv/
+env/
+venv/
+ENV/
+
+# macOS
+.DS_Store
+
+# Jupyter Notebook checkpoints (if any)
+.ipynb_checkpoints
+
+# Audio and temp files
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.m4a
+*.aiff
+*.aif
+*.wma
+*.aac
+*.opus
+*.amr
+*.webm
+
+# Temp files created during processing
+*.tmp
+*.temp
+*.log
+*.bak
+
+# Streamlit specific
+.streamlit/config.toml
+.streamlit/secrets.toml
+
+# VSCode
+.vscode/
+
+# Python-related cache
+*.log
+*.sqlite3
+*.db
+*.pkl
+
+# OS files
+Thumbs.db
+ehthumbs.db
+
+# GitHub Codespaces
+*.code-workspace

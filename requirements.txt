@@ -3,4 +3,6 @@ noisereduce
 librosa
 soundfile
 pydub
-ffmpeg-python
+numpy
+scipy
+matplotlib

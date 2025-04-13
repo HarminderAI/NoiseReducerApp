@@ -1,1 +1,4 @@
+# System-level dependencies
 ffmpeg
+libsndfile1
+python3-pip
