@@ -23,6 +23,7 @@ AudioSegment.converter = which("ffmpeg")
 
 # Streamlit UI
 st.set_page_config(page_title="Noise Reducer", layout="centered")
+st.info("✅ App loaded successfully!")
 st.title("🔉 Noise Reducer App (Optimized for Lectures)")
 st.markdown("Upload a `.wav` or `.mp3` lecture and get a **cleaned, clearer version**!")
 
