@@ -6,6 +6,7 @@ import soundfile as sf
 import os
 import tempfile
 import warnings
+import re
 import matplotlib.pyplot as plt
 from pydub.utils import which
 from pydub import AudioSegment
@@ -117,9 +118,12 @@ if uploaded_file is not None:
 
             # Final output file
             file_ext = "mp3" if output_format == "MP3" else "wav"
-            cleaned_filename = uploaded_file.name.replace(".", f"_cleaned.")
+            
+            # Sanitize uploaded filename
+            safe_name = re.sub(r"[^a-zA-Z0-9_.-]", "_", uploaded_file.name)
+            cleaned_filename = safe_name.replace(".", f"_cleaned.")
             cleaned_path_final = cleaned_filename.rsplit(".", 1)[0] + "." + file_ext
-
+            
             with tempfile.NamedTemporaryFile(delete=False, suffix=f".{file_ext}") as tmp_out:
                 enhanced_audio.export(tmp_out.name, format=file_ext)
                 final_output_path = tmp_out.name
