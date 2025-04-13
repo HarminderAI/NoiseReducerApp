@@ -36,56 +36,47 @@ def normalize_audio(audio_segment):
     return audio_segment.normalize()
 
 if uploaded_file is not None:
-    with st.spinner("Processing... Please wait ⏳"):
-        # Save to a temporary location
-        temp_dir = tempfile.mkdtemp()
-        input_path = os.path.join(temp_dir, uploaded_file.name)
-        with open(input_path, "wb") as f:
-            f.write(uploaded_file.read())
+    try:
+        with st.spinner("Processing... Please wait ⏳"):
+            # Save to a temporary location
+            temp_dir = tempfile.mkdtemp()
+            input_path = os.path.join(temp_dir, uploaded_file.name)
+            with open(input_path, "wb") as f:
+                f.write(uploaded_file.read())
 
-        # Load audio
-        y, sr = librosa.load(input_path, sr=None)
+            # Load audio using librosa
+            y, sr = librosa.load(input_path, sr=None)
 
-        # Apply noise reduction
-        reduced_noise = nr.reduce_noise(y=y, sr=sr)
+            # Apply noise reduction
+            reduced_noise = nr.reduce_noise(y=y, sr=sr)
 
-        # Save cleaned file temporarily to apply Pydub normalization
-        temp_cleaned_path = os.path.join(temp_dir, "temp_cleaned.wav")
-        sf.write(temp_cleaned_path, reduced_noise, sr)
+            # Save cleaned audio temporarily for further processing
+            temp_cleaned_path = os.path.join(temp_dir, "temp_cleaned.wav")
+            sf.write(temp_cleaned_path, reduced_noise, sr)
 
-        # Load the cleaned audio file with Pydub
-        audio = AudioSegment.from_wav(temp_cleaned_path)
+            # Load cleaned audio into Pydub
+            audio = AudioSegment.from_wav(temp_cleaned_path)
 
-        # Apply noise reduction if further needed
-        reduced_audio_segment = AudioSegment(
-            reduced_noise.tobytes(),
-            frame_rate=sr,
-            sample_width=2,
-            channels=1
-        )
+            # Normalize and limit
+            normalized_audio = normalize_audio(audio)
+            limited_audio = limit_audio(normalized_audio)
 
-        # Normalize the cleaned audio
-        normalized_audio = normalize_audio(reduced_audio_segment)
+            # Save final cleaned audio
+            cleaned_filename = uploaded_file.name.replace(".", "_cleaned.")
+            cleaned_path = os.path.join(temp_dir, cleaned_filename)
+            limited_audio.export(cleaned_path, format="wav")
 
-        # Limit audio volume to avoid clipping
-        limited_audio = limit_audio(normalized_audio)
+            st.success("Done! 🎉 Your cleaned file is ready.")
 
-        # Save the cleaned and volume-limited audio
-        cleaned_filename = uploaded_file.name.replace(".", "_cleaned.")
-        cleaned_path = os.path.join(temp_dir, cleaned_filename)
-        limited_audio.export(cleaned_path, format="wav")
+            # Play cleaned audio
+            st.audio(cleaned_path, format="audio/wav")
 
-        st.success("Done! 🎉 Your cleaned file is ready.")
-
-    # Play cleaned audio before download
-    st.audio(cleaned_path, format="audio/wav")
-
-    with open(cleaned_path, "rb") as f:
-        st.download_button(
-            label="⬇️ Download Cleaned Audio",
-            data=f,
-            file_name=cleaned_filename,
-            mime="audio/wav"
-        )
-except Exception as e:
+            with open(cleaned_path, "rb") as f:
+                st.download_button(
+                    label="⬇️ Download Cleaned Audio",
+                    data=f,
+                    file_name=cleaned_filename,
+                    mime="audio/wav"
+                )
+    except Exception as e:
         st.error(f"❌ Error during processing: {str(e)}")
